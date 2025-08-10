@@ -1,0 +1,24 @@
+{
+  "name": "bookmanage_api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/client": "^5.10.0",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "identicon.js": "^2.3.3",
+    "jsonwebtoken": "^9.0.0",
+    "nodemon": "^3.1.10",
+    "prisma": "^5.10.0"
+  }
+}
