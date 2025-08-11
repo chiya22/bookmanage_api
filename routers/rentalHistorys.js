@@ -5,7 +5,7 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const prisma = new PrismaClient();
 
 //貸出履歴取得（全件）
-router.get("/rentalHistorys",isAuthenticated, async (req, res) => {
+router.get("/",isAuthenticated, async (req, res) => {
   try {
     const rentalHistorys = await prisma.rentalHistorys.findMany({
 //      take: 10,
@@ -20,7 +20,7 @@ router.get("/rentalHistorys",isAuthenticated, async (req, res) => {
 })
 
 //貸出履歴取得（1件）
-router.get("/rentalHistorys/:isbn",isAuthenticated, async (req, res) => {
+router.get("/:isbn",isAuthenticated, async (req, res) => {
   const { isbn } = req.params;
   try {
     const rentalHistory = await prisma.rentalHistorys.findUnique({
@@ -34,13 +34,7 @@ router.get("/rentalHistorys/:isbn",isAuthenticated, async (req, res) => {
 })
 
 //貸出履歴登録
-router.post("/rentalHistorys", isAuthenticated, async (req, res) => {
-  const { rentalHistory } = req.body;
-
-  if (!rentalHistory) {
-    return res.status(400).json({ message: "登録情報がありません" });
-  }
-
+router.post("/", isAuthenticated, async (req, res) => {
   const {isbn, rentalDate, renterName} = req.body;
   if (!isbn || !rentalDate || !renterName) {
     return res.status(400).json({ error: '必須項目に値が設定されていません' });
@@ -62,10 +56,9 @@ router.post("/rentalHistorys", isAuthenticated, async (req, res) => {
 });
 
 //貸出履歴更新
-router.put('/rentalHistorys/:isbn', async (req, res) => {
+router.put('/', async (req, res) => {
   try {
-    const isbn = Number(req.params.isbn);
-    const { rentalDate, returnDate, renterName } = req.body;
+    const { isbn, rentalDate, returnDate, renterName } = req.body;
 
     if (!isbn || !rentalDate || !rerturnDate || !renterName) {
       return res.status(400).json({ error: '更新する項目に値が設定されていません。' });
@@ -91,9 +84,9 @@ router.put('/rentalHistorys/:isbn', async (req, res) => {
 });
 
 //貸出履歴削除
-router.delete('/rentalHistorys/:isbn', async (req, res) => {
+router.delete('/', async (req, res) => {
   try {
-    const isbn = Number(req.params.isbn);
+    const {isbn} = req.body;
 
     // 削除処理
     const deleteRentalHistory = await prisma.rentalHistorys.delete({

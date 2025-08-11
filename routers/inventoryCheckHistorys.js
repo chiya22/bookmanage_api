@@ -5,7 +5,7 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const prisma = new PrismaClient();
 
 //チェック履歴取得（全件）
-router.get("/inventoryCheckHistory",isAuthenticated, async (req, res) => {
+router.get("/",isAuthenticated, async (req, res) => {
   try {
     const inventoryCheckHistorys = await prisma.inventoryCheckHistorys.findMany({
 //      take: 10,
@@ -20,7 +20,7 @@ router.get("/inventoryCheckHistory",isAuthenticated, async (req, res) => {
 })
 
 //チェック履歴取得（1件）
-router.get("/inventoryCheckHistorys/:isbn",isAuthenticated, async (req, res) => {
+router.get("/:isbn",isAuthenticated, async (req, res) => {
   const { isbn } = req.params;
   try {
     const inventoryCheckHistory = await prisma.inventoryCheckHistorys.findUnique({
@@ -34,12 +34,7 @@ router.get("/inventoryCheckHistorys/:isbn",isAuthenticated, async (req, res) => 
 })
 
 //チェック履歴登録
-router.post("/inventoryCheckHistorys", isAuthenticated, async (req, res) => {
-  const { inventoryCheckHistory } = req.body;
-
-  if (!inventoryCheckHistory) {
-    return res.status(400).json({ message: "チェック履歴情報がありません" });
-  }
+router.post("/", isAuthenticated, async (req, res) => {
 
   const {isbn} = req.body;
   if (!isbn ) {
@@ -60,10 +55,9 @@ router.post("/inventoryCheckHistorys", isAuthenticated, async (req, res) => {
 });
 
 //チェック履歴更新
-router.put('/inventoryCheckHistorys/:isbn', async (req, res) => {
+router.put('/', async (req, res) => {
   try {
-    const isbn = Number(req.params.isbn);
-    const { checkDate } = req.body;
+    const { isbn, checkDate } = req.body;
 
     if (!isbn || !checkDate) {
       return res.status(400).json({ error: '更新する項目に値が設定されていません。' });
@@ -87,9 +81,9 @@ router.put('/inventoryCheckHistorys/:isbn', async (req, res) => {
 });
 
 //チェック履歴削除
-router.delete('/inventoryCheckHistorys/:isbn', async (req, res) => {
+router.delete('/', async (req, res) => {
   try {
-    const isbn = Number(req.params.isbn);
+    const {isbn} = req.body;
 
     // 削除処理
     const deletedinventoryCheckHistory = await prisma.inventoryCheckHistorys.delete({
