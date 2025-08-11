@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 //貸出履歴取得（全件）
 router.get("/",isAuthenticated, async (req, res) => {
   try {
-    const rentalHistorys = await prisma.rentalHistorys.findMany({
+    const rentalHistorys = await prisma.rentalHistory.findMany({
 //      take: 10,
       orderBy: { rentalDate: "desc" },
     });
@@ -23,7 +23,7 @@ router.get("/",isAuthenticated, async (req, res) => {
 router.get("/:isbn",isAuthenticated, async (req, res) => {
   const { isbn } = req.params;
   try {
-    const rentalHistory = await prisma.rentalHistorys.findUnique({
+    const rentalHistory = await prisma.rentalHistory.findUnique({
      where: {isbn},
     });
     res.status(201).json(rentalHistory);
@@ -41,7 +41,7 @@ router.post("/", isAuthenticated, async (req, res) => {
   }
 
   try {
-    const newRentalHistory = await prisma.rentalHistorys.create({
+    const newRentalHistory = await prisma.rentalHistory.create({
       data: {
         isbn,
         rentalDate,
@@ -58,19 +58,18 @@ router.post("/", isAuthenticated, async (req, res) => {
 //貸出履歴更新
 router.put('/', async (req, res) => {
   try {
-    const { isbn, rentalDate, returnDate, renterName } = req.body;
+    const { id, returnDate } = req.body;
 
-    if (!isbn || !rentalDate || !rerturnDate || !renterName) {
+    if (!id || !returnDate) {
       return res.status(400).json({ error: '更新する項目に値が設定されていません。' });
     }
 
     // 更新処理
-    const updateRentalHistory = await prisma.rentalHistorys.update({
-      where: { isbn },
+    const id_number = Number(id)
+    const updateRentalHistory = await prisma.rentalHistory.update({
+      where: {id:id_number},
       data: {
-        ...(rentalDate && { rentalDate }),
         ...(returnDate && { returnDate }),
-        ...(renterName && { renterName }),
       },
     });
     res.status(201).json(updateRentalHistory);
@@ -84,22 +83,22 @@ router.put('/', async (req, res) => {
 });
 
 //貸出履歴削除
-router.delete('/', async (req, res) => {
-  try {
-    const {isbn} = req.body;
+// router.delete('/', async (req, res) => {
+//   try {
+//     const {isbn} = req.body;
 
-    // 削除処理
-    const deleteRentalHistory = await prisma.rentalHistorys.delete({
-      where: { isbn },
-    });
-    res.status(201).json(deleteRentalHistory);
-  } catch (error) {
-    console.error(error);
-    if (error.code === 'P2025') {
-      return res.status(404).json({ error: '削除対象が見つかりません' });
-    }
-    res.status(500).json({ error: 'サーバーエラーが発生しました' });
-  }
-});
+//     // 削除処理
+//     const deleteRentalHistory = await prisma.rentalHistory.delete({
+//       where: { isbn },
+//     });
+//     res.status(201).json(deleteRentalHistory);
+//   } catch (error) {
+//     console.error(error);
+//     if (error.code === 'P2025') {
+//       return res.status(404).json({ error: '削除対象が見つかりません' });
+//     }
+//     res.status(500).json({ error: 'サーバーエラーが発生しました' });
+//   }
+// });
 
 module.exports = router;
