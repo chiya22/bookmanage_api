@@ -32,7 +32,7 @@ model RentalHistory {
   id Int @id @default(autoincrement())
   isbn String
   rentalDate String
-  returnDate String
+  returnDate String?
   renterName String
   book Book @relation(fields: [isbn], references: [isbn])
 }
