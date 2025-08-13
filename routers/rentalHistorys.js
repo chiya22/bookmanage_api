@@ -56,9 +56,10 @@ router.post("/",  async (req, res) => {
 });
 
 //貸出履歴更新
-router.put('/', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
-    const { id, returnDate } = req.body;
+    const id = req.params.id;
+    const { returnDate } = req.body;
 
     if (!id || !returnDate) {
       return res.status(400).json({ error: '更新する項目に値が設定されていません。' });
@@ -83,22 +84,22 @@ router.put('/', async (req, res) => {
 });
 
 //貸出履歴削除
-// router.delete('/', async (req, res) => {
-//   try {
-//     const {isbn} = req.body;
+router.delete('/:isbn', async (req, res) => {
+  try {
+    const isbn = req.params.isbn;
 
-//     // 削除処理
-//     const deleteRentalHistory = await prisma.rentalHistory.delete({
-//       where: { isbn },
-//     });
-//     res.status(201).json(deleteRentalHistory);
-//   } catch (error) {
-//     console.error(error);
-//     if (error.code === 'P2025') {
-//       return res.status(404).json({ error: '削除対象が見つかりません' });
-//     }
-//     res.status(500).json({ error: 'サーバーエラーが発生しました' });
-//   }
-// });
+    // 削除処理
+    const deleteRentalHistory = await prisma.rentalHistory.delete({
+      where: { isbn },
+    });
+    res.status(201).json(deleteRentalHistory);
+  } catch (error) {
+    console.error(error);
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: '削除対象が見つかりません' });
+    }
+    res.status(500).json({ error: 'サーバーエラーが発生しました' });
+  }
+});
 
 module.exports = router;
