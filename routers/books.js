@@ -5,7 +5,7 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const prisma = new PrismaClient();
 
 //書籍取得（全件）
-router.get("/",isAuthenticated, async (req, res) => {
+router.get("/",async (req, res) => {
   try {
     const books = await prisma.book.findMany({
 //      take: 10,
@@ -20,7 +20,7 @@ router.get("/",isAuthenticated, async (req, res) => {
 })
 
 //書籍取得（1件）
-router.get("/:isbn",isAuthenticated, async (req, res) => {
+router.get("/:isbn",async (req, res) => {
   const { isbn } = req.params;
   try {
     const book = await prisma.book.findUnique({
@@ -34,7 +34,7 @@ router.get("/:isbn",isAuthenticated, async (req, res) => {
 })
 
 //書籍登録
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/", async (req, res) => {
 
   const {isbn, title, author,publisher} = req.body;
   console.log(isbn);

@@ -5,7 +5,7 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const prisma = new PrismaClient();
 
 //チェック履歴取得（全件）
-router.get("/",isAuthenticated, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const inventoryCheckHistorys = await prisma.inventoryCheckHistory.findMany({
 //      take: 10,
@@ -20,7 +20,7 @@ router.get("/",isAuthenticated, async (req, res) => {
 })
 
 //チェック履歴取得（1件）
-router.get("/:isbn",isAuthenticated, async (req, res) => {
+router.get("/:isbn", async (req, res) => {
   const { isbn } = req.params;
   try {
     const inventoryCheckHistory = await prisma.inventoryCheckHistory.findUnique({
@@ -34,7 +34,7 @@ router.get("/:isbn",isAuthenticated, async (req, res) => {
 })
 
 //チェック履歴登録
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/",  async (req, res) => {
 
   const {isbn, checkDate} = req.body;
   if (!isbn || !checkDate) {

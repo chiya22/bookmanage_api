@@ -5,6 +5,8 @@ const jwt = require("jsonwebtoken");
 
 const prisma = new PrismaClient();
 
+// 社内サーバーのみで運用するため使用しない
+
 //新規ユーザー登録API
 router.post("/register", async (req, res) => {
 

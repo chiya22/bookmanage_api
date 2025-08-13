@@ -5,7 +5,7 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 const prisma = new PrismaClient();
 
 //貸出履歴取得（全件）
-router.get("/",isAuthenticated, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const rentalHistorys = await prisma.rentalHistory.findMany({
 //      take: 10,
@@ -20,7 +20,7 @@ router.get("/",isAuthenticated, async (req, res) => {
 })
 
 //貸出履歴取得（1件）
-router.get("/:isbn",isAuthenticated, async (req, res) => {
+router.get("/:isbn", async (req, res) => {
   const { isbn } = req.params;
   try {
     const rentalHistory = await prisma.rentalHistory.findUnique({
@@ -34,7 +34,7 @@ router.get("/:isbn",isAuthenticated, async (req, res) => {
 })
 
 //貸出履歴登録
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/",  async (req, res) => {
   const {isbn, rentalDate, renterName} = req.body;
   if (!isbn || !rentalDate || !renterName) {
     return res.status(400).json({ error: '必須項目に値が設定されていません' });
