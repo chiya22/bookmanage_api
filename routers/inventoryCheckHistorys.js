@@ -82,22 +82,22 @@ router.post("/",  async (req, res) => {
 // });
 
 //チェック履歴削除
-// router.delete('/', async (req, res) => {
-//   try {
-//     const {isbn} = req.body;
+router.delete('/:isbn', async (req, res) => {
+  try {
+    const isbn = req.params.isbn;
 
-//     // 削除処理
-//     const deletedinventoryCheckHistory = await prisma.inventoryCheckHistory.delete({
-//       where: { isbn },
-//     });
-//     res.status(201).json(deletedinventoryCheckHistory);
-//   } catch (error) {
-//     console.error(error);
-//     if (error.code === 'P2025') {
-//       return res.status(404).json({ error: '削除対象が見つかりません' });
-//     }
-//     res.status(500).json({ error: 'サーバーエラーが発生しました' });
-//   }
-// });
+    // 削除処理
+    const deletedinventoryCheckHistory = await prisma.inventoryCheckHistory.delete({
+      where: { isbn },
+    });
+    res.status(201).json(deletedinventoryCheckHistory);
+  } catch (error) {
+    console.error(error);
+    if (error.code === 'P2025') {
+      return res.status(404).json({ error: '削除対象が見つかりません' });
+    }
+    res.status(500).json({ error: 'サーバーエラーが発生しました' });
+  }
+});
 
 module.exports = router;
