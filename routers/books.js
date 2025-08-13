@@ -37,11 +37,10 @@ router.get("/:isbn",async (req, res) => {
 router.post("/", async (req, res) => {
 
   const {isbn, title, author,publisher} = req.body;
-  console.log(isbn);
-  if (!isbn || !title || !author || !publisher ) {
+
+  if (!isbn || !title || !author) {
     return res.status(400).json({ error: '必須項目に値が設定されていません' });
   }
-
   try {
     const newBook = await prisma.book.create({
       data: {
@@ -59,15 +58,12 @@ router.post("/", async (req, res) => {
 });
 
 //書籍更新
-router.put('/', async (req, res) => {
+router.put('/:isbn', async (req, res) => {
   try {
-    const { isbn, title, author, publisher, isRented, rentedBy } = req.body;
+    const isbn = req.params.isbn;
+    const { isRented, rentedBy } = req.body;
 
-    if (!isbn || !title || !author || !publisher || !isRented) {
-      return res.status(400).json({ error: '更新する項目に値が設定されていません。' });
-    }
-
-    if ((isRented.toLowerCase() === "true") && !rentedBy) {
+    if (!isbn) {
       return res.status(400).json({ error: '更新する項目に値が設定されていません。' });
     }
 
@@ -75,10 +71,7 @@ router.put('/', async (req, res) => {
     const updatedBook = await prisma.book.update({
       where: { isbn },
       data: {
-        ...(title && { title }),
-        ...(author && { author }),
-        ...(publisher && { publisher }),
-        ...(isRented && { isRented: isRented.toLowerCase() === "true" }),
+        isRented,
         rentedBy: rentedBy? rentedBy: null,
       },
     });
@@ -93,9 +86,9 @@ router.put('/', async (req, res) => {
 });
 
 //書籍削除
-router.delete('/', async (req, res) => {
+router.delete('/:isbn', async (req, res) => {
   try {
-    const { isbn } = req.body;
+    const isbn = req.params.isbn;
 
     // 削除処理
     const deletedBook = await prisma.book.delete({
