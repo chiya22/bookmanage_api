@@ -38,7 +38,7 @@ router.post("/", async (req, res) => {
 
   const {isbn, title, author,publisher} = req.body;
 
-  if (!isbn || !title || !author) {
+  if (!isbn || !title ) {
     return res.status(400).json({ error: '必須項目に値が設定されていません' });
   }
   try {
